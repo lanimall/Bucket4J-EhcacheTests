@@ -23,17 +23,17 @@ public class CacheUtils {
 
     private static Logger log = LoggerFactory.getLogger(CacheUtils.class);
 
-    public static Cache getCache(CacheManager manager) {
+    public static Cache getCache(CacheManager manager, Class key, Class value) {
         String cacheName = "";
         if (null != System.getProperty(ENV_CACHE_NAME)) {
             cacheName = System.getProperty(ENV_CACHE_NAME);
         }
 
-        return getCache(manager, cacheName);
+        return getCache(manager, cacheName, key, value);
     }
 
-    public static Cache getCache(CacheManager manager, String cacheName) {
-        Cache cache = manager.getCache(cacheName);
+    public static Cache getCache(CacheManager manager, String cacheName, Class key, Class value) {
+        Cache cache = manager.getCache(cacheName, key, value);
         if(null == cache)
             throw new IllegalStateException("Cache should not be null at this point...check if you requested the right cacheName");
 

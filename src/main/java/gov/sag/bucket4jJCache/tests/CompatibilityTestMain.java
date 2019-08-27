@@ -21,7 +21,7 @@ public class CompatibilityTestMain {
 
     public static void main(String[] args) throws InterruptedException, URISyntaxException {
         CacheManager manager = CacheUtils.getCacheManager();
-        Cache<String, Integer> readyCache = CacheUtils.getCache(manager,"CompatibilityTest");
+        Cache<String, Integer> readyCache = CacheUtils.getCache(manager,"CompatibilityTest", String.class, Integer.class);
         new CompatibilityTestMain(readyCache).test();
     }
 

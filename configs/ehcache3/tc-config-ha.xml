@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<tc-config xmlns="http://www.terracotta.org/config"
+           xmlns:ohr="http://www.terracotta.org/config/offheap-resource"
+           xmlns:data="http://www.terracottatech.com/config/data-roots"
+           xmlns:persistence="http://www.terracottatech.com/config/platform-persistence">
+
+    <plugins>
+        <config>
+            <ohr:offheap-resources>
+                <ohr:resource name="main" unit="GB">2</ohr:resource>
+            </ohr:offheap-resources>
+        </config>
+        <config>
+            <data:data-directories>
+                <data:directory name="data" use-for-platform="true">%H/terracotta-ehcache3/server-data1</data:directory>
+            </data:data-directories>
+        </config>
+    </plugins>
+
+    <servers>
+        <server host="localhost" name="clustered1">
+            <logs>%H/terracotta-ehcache3/server-logs1</logs>
+            <tsa-port>9410</tsa-port>
+            <tsa-group-port>9430</tsa-group-port>
+        </server>
+        <server host="localhost" name="clustered2">
+            <logs>%H/terracotta-ehcache3/server-logs2</logs>
+            <tsa-port>9510</tsa-port>
+            <tsa-group-port>9530</tsa-group-port>
+        </server>
+        <client-reconnect-window>120</client-reconnect-window>
+    </servers>
+
+    <!--
+    This failover-priority setting indicates that the stripe prefers availability to consistency in a split-brain scenario.
+      -->
+    <failover-priority>
+        <availability/>
+    </failover-priority>
+</tc-config>

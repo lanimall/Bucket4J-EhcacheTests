@@ -49,7 +49,7 @@ public class Launcher {
 
     public Launcher() throws Exception {
         CacheManager manager = CacheUtils.getCacheManager();
-        cache = CacheUtils.getCache(manager);
+        cache = CacheUtils.getCache(manager, String.class, GridBucketState.class);
 
         // init bucket registry
         buckets = Bucket4j.extension(JCache.class).proxyManagerForCache(cache);
