@@ -128,9 +128,7 @@
                     <repositoryLayout>flat</repositoryLayout>
                     <projectArtifactFirstInClassPath>true</projectArtifactFirstInClassPath>
                     <useWildcardClassPath>true</useWildcardClassPath>
-                    <extraJvmArguments>-Xms1g -Xmx2g -XX:MaxPermSize=512m
-                        -XX:+UseParallelOldGC -XX:+UseCompressedOops
-                        -XX:MaxDirectMemorySize=20G
+                    <extraJvmArguments>-Xms1g -Xmx2g -XX:MaxDirectMemorySize=20G
                         -Dehcache.config.path=${ehcache.config.path}
                         -Dehcache.config.cachename=${ehcache.config.cachename}
                         -Dcom.tc.productkey.path=${ehcache.ee.license}
@@ -140,6 +138,10 @@
                         <program>
                             <mainClass>gov.sag.bucket4jJCache.Launcher</mainClass>
                             <name>Launcher</name>
+                        </program>
+                        <program>
+                            <mainClass>gov.sag.bucket4jJCache.tests.CompatibilityTestMain</mainClass>
+                            <name>CompatibilityTest</name>
                         </program>
                     </programs>
                 </configuration>
