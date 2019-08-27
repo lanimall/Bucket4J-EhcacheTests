@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="xsds/ehcache4.xsd" updateCheck="false"
+         monitoring="autodetect" dynamicConfig="true" name="TestCacheManager-Distributed">
+
+    <terracottaConfig url="localhost:9510,localhost:9610"/>
+
+    <defaultCache eternal="true" overflowToOffHeap="false"/>
+
+    <cache name="testCache"
+           timeToLiveSeconds="600"
+           maxEntriesLocalHeap="100000">
+        <!--<pinning store="inCache" />-->
+        <terracotta>
+            <nonstop immediateTimeout="true" timeoutMillis="30000">
+                <timeoutBehavior type="exception" />
+            </nonstop>
+        </terracotta>
+        <!--  synchronousWrites="true" //  consistency="strong" -->
+    </cache>
+</ehcache>
