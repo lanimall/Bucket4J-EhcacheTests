@@ -19,6 +19,7 @@
         <ehcache.ee.license>${user.home}/terracotta-license.key</ehcache.ee.license>
         <ehcache.config.path>classpath:ehcache4x.xml</ehcache.config.path>
         <ehcache.config.cachename>testCache</ehcache.config.cachename>
+        <ehcache.major.release>3</ehcache.major.release>
         <tc.config.url>localhost:9510,localhost:9610</tc.config.url>
     </properties>
 
@@ -122,6 +123,7 @@
                         -Dehcache.config.cachename=${ehcache.config.cachename}
                         -Dcom.tc.productkey.path=${ehcache.ee.license}
                         -Dtc.connect.url=${tc.config.url}
+                        -Dehcache.major.release=${ehcache.major.release}
                     </extraJvmArguments>
                     <programs>
                         <program>
@@ -145,6 +147,7 @@
             <properties>
                 <ehcache.version>3.8.0</ehcache.version>
                 <ehcache.ee.license></ehcache.ee.license>
+                <ehcache.major.release>3</ehcache.major.release>
                 <ehcache.config.path>classpath:ehcache3.xml</ehcache.config.path>
             </properties>
             <dependencies>
@@ -168,6 +171,7 @@
             <properties>
                 <ehcache.version>3.8.0</ehcache.version>
                 <ehcache.ee.license></ehcache.ee.license>
+                <ehcache.major.release>3</ehcache.major.release>
                 <ehcache.config.path>classpath:ehcache3-clustered.xml</ehcache.config.path>
             </properties>
             <dependencies>
@@ -200,6 +204,7 @@
                 <!--<ehcache.version>10.1.0.2.32</ehcache.version>-->
                 <ehcache.ee.license>${user.home}/terracotta-ehcache-license.xml</ehcache.ee.license>
                 <ehcache.config.path>classpath:ehcache3-ee-clustered.xml</ehcache.config.path>
+                <ehcache.major.release>3</ehcache.major.release>
             </properties>
             <dependencies>
                 <!-- Jcache api -->
@@ -229,6 +234,7 @@
                 <ehcache.version>2.10.4.3.15</ehcache.version>
                 <ehcache.ee.license>${user.home}/terracotta-license.key</ehcache.ee.license>
                 <ehcache.config.path>classpath:ehcache-ee.xml</ehcache.config.path>
+                <ehcache.major.release>2</ehcache.major.release>
             </properties>
             <dependencies>
                 <!-- Jcache implementation for ehcache 2.x -->
@@ -259,6 +265,7 @@
                 <toolkit.version>4.3.4.3.15</toolkit.version>
                 <ehcache.ee.license>${user.home}/terracotta-license.key</ehcache.ee.license>
                 <ehcache.config.path>classpath:ehcache-ee-clustered.xml</ehcache.config.path>
+                <ehcache.major.release>2</ehcache.major.release>
             </properties>
             <dependencies>
                 <!-- Jcache implementation for ehcache 2.x -->
@@ -272,6 +279,13 @@
                             <artifactId>ehcache</artifactId>
                         </exclusion>
                     </exclusions>
+                </dependency>
+
+                <!-- Jcache api -->
+                <dependency>
+                    <groupId>javax.cache</groupId>
+                    <artifactId>cache-api</artifactId>
+                    <version>1.1.0</version>
                 </dependency>
 
                 <!-- EhCache -->

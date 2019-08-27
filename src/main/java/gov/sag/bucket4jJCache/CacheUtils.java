@@ -20,8 +20,27 @@ import java.net.URL;
 public class CacheUtils {
     public static final String ENV_CACHE_CONFIGPATH = "ehcache.config.path";
     public static final String ENV_CACHE_NAME = "ehcache.config.cachename";
+    public static final String ENV_EHCACHE_RELEASE = "ehcache.major.release";
+    public static final String ENV_EHCACHE_RELEASE_DEFAULT = "3";
 
     private static Logger log = LoggerFactory.getLogger(CacheUtils.class);
+
+    public static Cache getCache(CacheManager manager) {
+        String cacheName = "";
+        if (null != System.getProperty(ENV_CACHE_NAME)) {
+            cacheName = System.getProperty(ENV_CACHE_NAME);
+        }
+
+        return getCache(manager, cacheName);
+    }
+
+    public static Cache getCache(CacheManager manager, String cacheName) {
+        Cache cache = manager.getCache(cacheName);
+        if(null == cache)
+            throw new IllegalStateException("Cache should not be null at this point...check if you requested the right cacheName");
+
+        return cache;
+    }
 
     public static Cache getCache(CacheManager manager, Class key, Class value) {
         String cacheName = "";
@@ -33,7 +52,15 @@ public class CacheUtils {
     }
 
     public static Cache getCache(CacheManager manager, String cacheName, Class key, Class value) {
-        Cache cache = manager.getCache(cacheName, key, value);
+        Cache cache = null;
+
+        //little trick because the ehcache 2x implementation does not like the call with Class key, Class value (throws ClassCastException)
+        int ehcacheRelease = Integer.parseInt(System.getProperty(ENV_EHCACHE_RELEASE,ENV_EHCACHE_RELEASE_DEFAULT));
+        if(ehcacheRelease < 3)
+            cache = getCache(manager, cacheName);
+        else
+            cache = manager.getCache(cacheName, key, value);
+
         if(null == cache)
             throw new IllegalStateException("Cache should not be null at this point...check if you requested the right cacheName");
 
