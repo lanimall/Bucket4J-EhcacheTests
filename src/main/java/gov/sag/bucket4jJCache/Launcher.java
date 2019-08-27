@@ -71,8 +71,8 @@ public class Launcher {
 
     private static int operationIdCounter = 1;
     private enum OPERATIONS {
-        OP_LOAD("New Requests (@@opInput@@ <number of elements>)"),
-        OP_GETCOUNT("Display cache count (@@opInput@@ <key>)"),
+        OP_LOAD("New Requests (@@opInput@@ <number of requests> <bucket_key>)"),
+        OP_GETCOUNT("Display cache entry (@@opInput@@ <bucket_key>)"),
         OP_QUIT("Quit program");
 
         private String opInput;
