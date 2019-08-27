@@ -9,14 +9,24 @@
     <defaultCache eternal="true" overflowToOffHeap="false"/>
 
     <cache name="testCache"
-           timeToLiveSeconds="600"
+           timeToLiveSeconds="0"
            maxEntriesLocalHeap="100000">
-        <!--<pinning store="inCache" />-->
-        <terracotta>
+        <pinning store="inCache" />
+        <terracotta synchronousWrites="true" consistency="strong">
             <nonstop immediateTimeout="true" timeoutMillis="30000">
                 <timeoutBehavior type="exception" />
             </nonstop>
         </terracotta>
-        <!--  synchronousWrites="true" //  consistency="strong" -->
+    </cache>
+
+    <cache name="CompatibilityTest"
+           maxEntriesLocalHeap="100000"
+           timeToLiveSeconds="0">
+        <pinning store="inCache" />
+        <terracotta synchronousWrites="true" consistency="strong">
+            <nonstop immediateTimeout="true" timeoutMillis="30000">
+                <timeoutBehavior type="exception" />
+            </nonstop>
+        </terracotta>
     </cache>
 </ehcache>

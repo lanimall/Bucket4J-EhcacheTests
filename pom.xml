@@ -34,17 +34,6 @@
             <version>4.4.1</version>
         </dependency>
         <dependency>
-            <groupId>org.ehcache</groupId>
-            <artifactId>jcache</artifactId>
-            <version>1.0.1</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>net.sf.ehcache</groupId>
-                    <artifactId>ehcache</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
             <groupId>io.dropwizard.metrics</groupId>
             <artifactId>metrics-core</artifactId>
             <version>${metrics.version}</version>
@@ -152,6 +141,29 @@
 
     <profiles>
         <profile>
+            <id>ehcache3-oss-standalone</id>
+            <properties>
+                <ehcache.version>3.8.0</ehcache.version>
+                <ehcache.ee.license></ehcache.ee.license>
+                <ehcache.config.path>classpath:ehcache3.xml</ehcache.config.path>
+            </properties>
+            <dependencies>
+                <!-- Jcache api -->
+                <dependency>
+                    <groupId>javax.cache</groupId>
+                    <artifactId>cache-api</artifactId>
+                    <version>1.1.0</version>
+                </dependency>
+
+                <!-- https://mvnrepository.com/artifact/org.ehcache/ehcache -->
+                <dependency>
+                    <groupId>org.ehcache</groupId>
+                    <artifactId>ehcache</artifactId>
+                    <version>${ehcache.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
             <id>ehcache2-ee-standalone</id>
             <properties>
                 <ehcache.version>2.10.4.3.15</ehcache.version>
@@ -159,6 +171,19 @@
                 <ehcache.config.path>classpath:ehcache-ee.xml</ehcache.config.path>
             </properties>
             <dependencies>
+                <!-- Jcache implementation for ehcache 2.x -->
+                <dependency>
+                    <groupId>org.ehcache</groupId>
+                    <artifactId>jcache</artifactId>
+                    <version>1.0.1</version>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>net.sf.ehcache</groupId>
+                            <artifactId>ehcache</artifactId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>
+
                 <!-- EhCache -->
                 <dependency>
                     <groupId>net.sf.ehcache</groupId>
@@ -176,6 +201,19 @@
                 <ehcache.config.path>classpath:ehcache-ee-clustered.xml</ehcache.config.path>
             </properties>
             <dependencies>
+                <!-- Jcache implementation for ehcache 2.x -->
+                <dependency>
+                    <groupId>org.ehcache</groupId>
+                    <artifactId>jcache</artifactId>
+                    <version>1.0.1</version>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>net.sf.ehcache</groupId>
+                            <artifactId>ehcache</artifactId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>
+
                 <!-- EhCache -->
                 <dependency>
                     <groupId>net.sf.ehcache</groupId>
