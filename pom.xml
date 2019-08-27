@@ -11,7 +11,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <slf4j.version>1.7.1</slf4j.version>
+        <slf4j.version>1.7.25</slf4j.version>
         <junit.version>4.11</junit.version>
         <metrics.version>3.2.2</metrics.version>
         <maven.compiler.target>1.8</maven.compiler.target>
@@ -51,7 +51,7 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.1.7</version>
+            <version>1.2.3</version>
         </dependency>
     </dependencies>
 
