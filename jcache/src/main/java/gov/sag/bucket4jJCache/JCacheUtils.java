@@ -17,14 +17,14 @@ import java.net.URL;
 /**
  * @author Fabien Sanglier
  */
-public class CacheUtils {
+public class JCacheUtils {
     public static final String ENV_JCACHE_PROVIDER = "jcache.provider";
     public static final String ENV_CACHE_CONFIGPATH = "ehcache.config.path";
     public static final String ENV_CACHE_NAME = "ehcache.config.cachename";
     public static final String ENV_EHCACHE_RELEASE = "ehcache.major.release";
     public static final String ENV_EHCACHE_RELEASE_DEFAULT = "0";
 
-    private static Logger log = LoggerFactory.getLogger(CacheUtils.class);
+    private static Logger log = LoggerFactory.getLogger(JCacheUtils.class);
 
     public static Cache getCache(CacheManager manager) {
         String cacheName = "";
@@ -95,9 +95,9 @@ public class CacheUtils {
                 if (configLocationToLoad.indexOf("file:") > -1) {
                     input = new File(configLocationToLoad.substring("file:".length())).toURL();
                 } else if (configLocationToLoad.indexOf("classpath:") > -1) {
-                    input = CacheUtils.class.getClassLoader().getResource(configLocationToLoad.substring("classpath:".length()));
+                    input = JCacheUtils.class.getClassLoader().getResource(configLocationToLoad.substring("classpath:".length()));
                 } else { //default to classpath if no prefix is specified
-                    input = CacheUtils.class.getClassLoader().getResource(configLocationToLoad);
+                    input = JCacheUtils.class.getClassLoader().getResource(configLocationToLoad);
                 }
 
                 if (input == null) {
@@ -106,7 +106,7 @@ public class CacheUtils {
 
                 log.info("Loading Cache manager from " + configLocationToLoad);
                 try {
-                    cm = cachingProvider.getCacheManager(input.toURI(), CacheUtils.class.getClassLoader());
+                    cm = cachingProvider.getCacheManager(input.toURI(), JCacheUtils.class.getClassLoader());
                 } catch (URISyntaxException e) {
                     throw new IllegalArgumentException("Path '" + ENV_CACHE_CONFIGPATH + "' not valid");
                 }

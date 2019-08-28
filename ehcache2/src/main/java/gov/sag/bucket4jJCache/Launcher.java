@@ -1,21 +1,17 @@
 package gov.sag.bucket4jJCache;
 
 import io.github.bucket4j.*;
-import io.github.bucket4j.grid.GridBucketState;
 import io.github.bucket4j.grid.ProxyManager;
-import io.github.bucket4j.grid.jcache.JCache;
+import io.github.bucket4j.grid.ehcache2.Ehcache2;
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.Ehcache;
+import net.sf.ehcache.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.cache.Cache;
-import javax.cache.CacheManager;
-import javax.cache.Caching;
-import javax.cache.spi.CachingProvider;
 import java.time.Duration;
 import java.util.Arrays;
-import java.util.Random;
 import java.util.Scanner;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,8 +26,6 @@ public class Launcher {
     public static final String COMMAND_SEPARATOR = "~~";
 
     private static Logger log = LoggerFactory.getLogger(Launcher.class);
-
-    private Random rdm = new Random(System.nanoTime());
     Pattern loopPattern = Pattern.compile(LOOP_REGEX, Pattern.CASE_INSENSITIVE);
 
     public static final String ENV_BUCKET_CONFIG = "bucket.config.template";
@@ -74,15 +68,14 @@ public class Launcher {
     }
 
     // cache for storing token buckets, where IP is key.
-    private javax.cache.Cache<String, GridBucketState> cache;
+    private Ehcache cache;
     private ProxyManager<String> buckets;
 
     public Launcher() throws Exception {
-        CacheManager manager = CacheUtils.getCacheManager();
-        cache = CacheUtils.getCache(manager, String.class, GridBucketState.class);
+        cache = EhcacheUtils.getCache();
 
         // init bucket registry
-        buckets = Bucket4j.extension(JCache.class).proxyManagerForCache(cache);
+        buckets = Bucket4j.extension(Ehcache2.class).proxyManagerForCache((Cache)cache);
     }
 
     public static void main(String[] args) throws Exception {
@@ -322,11 +315,17 @@ public class Launcher {
                     int submitCount = 0;
                     while (submitCount < nbOfElements) {
                         // tryConsume returns false immediately if no tokens available with the bucket
-                        ConsumptionProbe probe = bucket.tryConsumeAndReturnRemaining(1);
-                        if (probe.isConsumed()) {
-                            System.out.println(String.format("The rate limit is NOT exceeded. %s", probe.toString()));
+//                        ConsumptionProbe probe = bucket.tryConsumeAndReturnRemaining(1);
+//                        if (probe.isConsumed()) {
+//                            System.out.println(String.format("The rate limit is NOT exceeded. %s", probe.toString()));
+//                        } else {
+//                            System.out.println(String.format("The rate limit IS exceeded. Remaining tokens: %d. Time to wait for next refill: %d ms", probe.getRemainingTokens(), probe.getNanosToWaitForRefill()/1000/1000));
+//                        }
+
+                        if (bucket.tryConsume(1)) {
+                            System.out.println(String.format("The rate limit is NOT exceeded"));
                         } else {
-                            System.out.println(String.format("The rate limit IS exceeded. Remaining tokens: %d. Time to wait for next refill: %d ms", probe.getRemainingTokens(), probe.getNanosToWaitForRefill()/1000/1000));
+                            System.out.println(String.format("The rate limit IS exceeded"));
                         }
 
                         submitCount++;
@@ -350,7 +349,7 @@ public class Launcher {
                     break;
             }
         } catch (Exception e) {
-            log.info(String.format("Exception occurred: %s", e.getMessage()));
+            log.error("Exception occurred", e);
         }
 
         log.info("#########################################################################");
@@ -371,11 +370,11 @@ public class Launcher {
     private Object get(String key, boolean displayTiming) {
         long start = System.nanoTime();
 
-        GridBucketState value = cache.get(key);
+        Element value = cache.get(key);
         if (displayTiming)
             displayTiming("Operation cache.get(key)", start);
 
-        return (null != value)?value.getState():null;
+        return (null != value)?value.getObjectValue():null;
     }
 
     private void displayTiming(String prefix, long startTimeNanos) {

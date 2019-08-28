@@ -1,16 +1,13 @@
 package gov.sag.bucket4jJCache.tests;
 
-import gov.sag.bucket4jJCache.CacheUtils;
+import gov.sag.bucket4jJCache.JCacheUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.cache.Cache;
 import javax.cache.CacheManager;
-import javax.cache.Caching;
 import javax.cache.processor.EntryProcessor;
-import javax.cache.spi.CachingProvider;
 import java.io.Serializable;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.concurrent.CountDownLatch;
 
@@ -20,8 +17,8 @@ public class CompatibilityTestMain {
     final Cache<String, Integer> cache;
 
     public static void main(String[] args) throws InterruptedException, URISyntaxException {
-        CacheManager manager = CacheUtils.getCacheManager();
-        Cache<String, Integer> readyCache = CacheUtils.getCache(manager,"CompatibilityTest", String.class, Integer.class);
+        CacheManager manager = JCacheUtils.getCacheManager();
+        Cache<String, Integer> readyCache = JCacheUtils.getCache(manager, "CompatibilityTest", String.class, Integer.class);
         new CompatibilityTestMain(readyCache).test();
     }
 
