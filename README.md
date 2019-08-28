@@ -1,3 +1,3 @@
-# Bucket4J-CacheTests
+# Bucket4J-EhcacheTests
 
-A simple client app to test Bucket4J with Distributed Ehcache and JCache providers.
+A simple client app to test Bucket4J with both Native Ehcache2 Provider and JCache Ehcache2 providers.

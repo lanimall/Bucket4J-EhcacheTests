@@ -2,7 +2,7 @@
 
 <ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="xsds/ehcache4.xsd" updateCheck="false"
-         monitoring="autodetect" dynamicConfig="true" name="TestCacheManager-Standalone-ee">
+         monitoring="autodetect" dynamicConfig="true" name="Bucket4J-EhcacheTests">
 
     <defaultCache eternal="true" overflowToOffHeap="false"/>
 

@@ -315,17 +315,11 @@ public class Launcher {
                     int submitCount = 0;
                     while (submitCount < nbOfElements) {
                         // tryConsume returns false immediately if no tokens available with the bucket
-//                        ConsumptionProbe probe = bucket.tryConsumeAndReturnRemaining(1);
-//                        if (probe.isConsumed()) {
-//                            System.out.println(String.format("The rate limit is NOT exceeded. %s", probe.toString()));
-//                        } else {
-//                            System.out.println(String.format("The rate limit IS exceeded. Remaining tokens: %d. Time to wait for next refill: %d ms", probe.getRemainingTokens(), probe.getNanosToWaitForRefill()/1000/1000));
-//                        }
-
-                        if (bucket.tryConsume(1)) {
-                            System.out.println(String.format("The rate limit is NOT exceeded"));
+                        ConsumptionProbe probe = bucket.tryConsumeAndReturnRemaining(1);
+                        if (probe.isConsumed()) {
+                            System.out.println(String.format("The rate limit is NOT exceeded. %s", probe.toString()));
                         } else {
-                            System.out.println(String.format("The rate limit IS exceeded"));
+                            System.out.println(String.format("The rate limit IS exceeded. Remaining tokens: %d. Time to wait for next refill: %d ms", probe.getRemainingTokens(), probe.getNanosToWaitForRefill()/1000/1000));
                         }
 
                         submitCount++;
