@@ -8,11 +8,13 @@
 
     <cache name="testCache"
            maxEntriesLocalHeap="100000"
+           maxBytesLocalOffHeap="1G"
            timeToLiveSeconds="0">
     </cache>
 
     <cache name="CompatibilityTest"
            maxEntriesLocalHeap="100000"
+           maxBytesLocalOffHeap="1G"
            timeToLiveSeconds="0">
     </cache>
 </ehcache>

@@ -16,11 +16,12 @@
         <metrics.version>3.2.2</metrics.version>
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.compiler.source>1.8</maven.compiler.source>
-        <ehcache.ee.license>${user.home}/terracotta-license.key</ehcache.ee.license>
-        <ehcache.config.path>classpath:ehcache4x.xml</ehcache.config.path>
+        <ehcache.ee.license></ehcache.ee.license>
+        <ehcache.config.path></ehcache.config.path>
         <ehcache.config.cachename>testCache</ehcache.config.cachename>
-        <ehcache.major.release>3</ehcache.major.release>
+        <ehcache.major.release></ehcache.major.release>
         <tc.config.url>localhost:9510,localhost:9610</tc.config.url>
+        <appassembler.extra.args></appassembler.extra.args>
     </properties>
 
     <dependencies>
@@ -33,6 +34,12 @@
             <groupId>com.github.vladimir-bukhtoyarov</groupId>
             <artifactId>bucket4j-jcache</artifactId>
             <version>4.4.1</version>
+        </dependency>
+        <!-- Jcache api -->
+        <dependency>
+            <groupId>javax.cache</groupId>
+            <artifactId>cache-api</artifactId>
+            <version>1.1.0</version>
         </dependency>
         <dependency>
             <groupId>io.dropwizard.metrics</groupId>
@@ -119,11 +126,8 @@
                     <projectArtifactFirstInClassPath>true</projectArtifactFirstInClassPath>
                     <useWildcardClassPath>true</useWildcardClassPath>
                     <extraJvmArguments>-Xms1g -Xmx2g -XX:MaxDirectMemorySize=20G
-                        -Dehcache.config.path=${ehcache.config.path}
-                        -Dehcache.config.cachename=${ehcache.config.cachename}
-                        -Dcom.tc.productkey.path=${ehcache.ee.license}
-                        -Dtc.connect.url=${tc.config.url}
-                        -Dehcache.major.release=${ehcache.major.release}
+                        -Dbucket.config.template=1
+                        ${appassembler.extra.args}
                     </extraJvmArguments>
                     <programs>
                         <program>
@@ -149,15 +153,14 @@
                 <ehcache.ee.license></ehcache.ee.license>
                 <ehcache.major.release>3</ehcache.major.release>
                 <ehcache.config.path>classpath:ehcache3.xml</ehcache.config.path>
+                <appassembler.extra.args>-Dehcache.config.path=${ehcache.config.path}
+                    -Dehcache.config.cachename=${ehcache.config.cachename}
+                    -Dcom.tc.productkey.path=${ehcache.ee.license}
+                    -Dtc.connect.url=${tc.config.url}
+                    -Dehcache.major.release=${ehcache.major.release}
+                </appassembler.extra.args>
             </properties>
             <dependencies>
-                <!-- Jcache api -->
-                <dependency>
-                    <groupId>javax.cache</groupId>
-                    <artifactId>cache-api</artifactId>
-                    <version>1.1.0</version>
-                </dependency>
-
                 <!-- Ehcadhe 3 -->
                 <dependency>
                     <groupId>org.ehcache</groupId>
@@ -173,15 +176,14 @@
                 <ehcache.ee.license></ehcache.ee.license>
                 <ehcache.major.release>3</ehcache.major.release>
                 <ehcache.config.path>classpath:ehcache3-clustered.xml</ehcache.config.path>
+                <appassembler.extra.args>-Dehcache.config.path=${ehcache.config.path}
+                    -Dehcache.config.cachename=${ehcache.config.cachename}
+                    -Dcom.tc.productkey.path=${ehcache.ee.license}
+                    -Dtc.connect.url=${tc.config.url}
+                    -Dehcache.major.release=${ehcache.major.release}
+                </appassembler.extra.args>
             </properties>
             <dependencies>
-                <!-- Jcache api -->
-                <dependency>
-                    <groupId>javax.cache</groupId>
-                    <artifactId>cache-api</artifactId>
-                    <version>1.1.0</version>
-                </dependency>
-
                 <!-- Ehcadhe 3 -->
                 <dependency>
                     <groupId>org.ehcache</groupId>
@@ -205,15 +207,14 @@
                 <ehcache.ee.license>${user.home}/terracotta-ehcache-license.xml</ehcache.ee.license>
                 <ehcache.config.path>classpath:ehcache3-ee-clustered.xml</ehcache.config.path>
                 <ehcache.major.release>3</ehcache.major.release>
+                <appassembler.extra.args>-Dehcache.config.path=${ehcache.config.path}
+                    -Dehcache.config.cachename=${ehcache.config.cachename}
+                    -Dcom.tc.productkey.path=${ehcache.ee.license}
+                    -Dtc.connect.url=${tc.config.url}
+                    -Dehcache.major.release=${ehcache.major.release}
+                </appassembler.extra.args>
             </properties>
             <dependencies>
-                <!-- Jcache api -->
-                <dependency>
-                    <groupId>javax.cache</groupId>
-                    <artifactId>cache-api</artifactId>
-                    <version>1.1.0</version>
-                </dependency>
-
                 <!-- Ehcadhe 3 -->
                 <dependency>
                     <groupId>com.terracotta</groupId>
@@ -235,6 +236,12 @@
                 <ehcache.ee.license>${user.home}/terracotta-license.key</ehcache.ee.license>
                 <ehcache.config.path>classpath:ehcache-ee.xml</ehcache.config.path>
                 <ehcache.major.release>2</ehcache.major.release>
+                <appassembler.extra.args>-Dehcache.config.path=${ehcache.config.path}
+                    -Dehcache.config.cachename=${ehcache.config.cachename}
+                    -Dcom.tc.productkey.path=${ehcache.ee.license}
+                    -Dtc.connect.url=${tc.config.url}
+                    -Dehcache.major.release=${ehcache.major.release}
+                </appassembler.extra.args>
             </properties>
             <dependencies>
                 <!-- Jcache implementation for ehcache 2.x -->
@@ -266,6 +273,12 @@
                 <ehcache.ee.license>${user.home}/terracotta-license.key</ehcache.ee.license>
                 <ehcache.config.path>classpath:ehcache-ee-clustered.xml</ehcache.config.path>
                 <ehcache.major.release>2</ehcache.major.release>
+                <appassembler.extra.args>-Dehcache.config.path=${ehcache.config.path}
+                    -Dehcache.config.cachename=${ehcache.config.cachename}
+                    -Dcom.tc.productkey.path=${ehcache.ee.license}
+                    -Dtc.connect.url=${tc.config.url}
+                    -Dehcache.major.release=${ehcache.major.release}
+                </appassembler.extra.args>
             </properties>
             <dependencies>
                 <!-- Jcache implementation for ehcache 2.x -->
@@ -281,13 +294,6 @@
                     </exclusions>
                 </dependency>
 
-                <!-- Jcache api -->
-                <dependency>
-                    <groupId>javax.cache</groupId>
-                    <artifactId>cache-api</artifactId>
-                    <version>1.1.0</version>
-                </dependency>
-
                 <!-- EhCache -->
                 <dependency>
                     <groupId>net.sf.ehcache</groupId>
@@ -298,6 +304,20 @@
                     <groupId>org.terracotta</groupId>
                     <artifactId>terracotta-toolkit-runtime-ee</artifactId>
                     <version>${toolkit.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>hazelcast</id>
+            <properties>
+                <appassembler.extra.args>-Dehcache.config.cachename=${ehcache.config.cachename}
+                    -Djcache.provider=com.hazelcast.cache.impl.HazelcastServerCachingProvider</appassembler.extra.args>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>com.hazelcast</groupId>
+                    <artifactId>hazelcast-all</artifactId>
+                    <version>3.4</version>
                 </dependency>
             </dependencies>
         </profile>

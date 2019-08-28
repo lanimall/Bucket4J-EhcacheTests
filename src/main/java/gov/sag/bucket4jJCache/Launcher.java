@@ -20,11 +20,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Launcher {
-    public static final String ENV_CACHE_NAME = "ehcache.config.cachename";
-    public static final String CACHE_CONFIG_FILE = "/ehcache-clustered.xml";
-//    public static final String CACHE_CONFIG_FILE = "/ehcache-ee.xml";
-
-
     public static final int DEFAULT_NBOFELEMENTS = 10;
     public static final String DEFAULT_BUCKET = "test";
 
@@ -39,9 +34,44 @@ public class Launcher {
     private Random rdm = new Random(System.nanoTime());
     Pattern loopPattern = Pattern.compile(LOOP_REGEX, Pattern.CASE_INSENSITIVE);
 
-    private static final BucketConfiguration configuration = Bucket4j.configurationBuilder()
-            .addLimit(Bandwidth.simple(30, Duration.ofMinutes(1)))
-            .build();
+    public static final String ENV_BUCKET_CONFIG = "bucket.config.template";
+    public static final String ENV_BUCKET_CONFIG_DEFAULT = "1";
+
+    private static final BucketConfiguration configuration;
+
+    static {
+        int bucketConfigTemplate = Integer.parseInt(System.getProperty(ENV_BUCKET_CONFIG,ENV_BUCKET_CONFIG_DEFAULT));
+        if(bucketConfigTemplate == 1)
+            configuration = getConfiguration1();
+        else if (bucketConfigTemplate == 2)
+            configuration = getConfiguration2();
+        else if (bucketConfigTemplate == 3)
+            configuration = getConfiguration3();
+        else
+            throw new IllegalArgumentException("bucketConfigTemplate value not valid: " + bucketConfigTemplate);
+    }
+
+    private static BucketConfiguration getConfiguration1(){
+        return Bucket4j.configurationBuilder()
+                .addLimit(Bandwidth.simple(10, Duration.ofMinutes(1)))
+                .build();
+    }
+
+    private static BucketConfiguration getConfiguration2(){
+        // When refill created via "intervally" factory method then greediness is turned-off.
+        Refill refill = Refill.intervally(10, Duration.ofMinutes(1));
+        Bandwidth bandwidth = Bandwidth.classic(50, refill);
+        return Bucket4j.configurationBuilder().addLimit(bandwidth).build();
+    }
+
+    // The bucket size is 50 calls (which cannot be exceeded at any given time),
+    // with a "refill rate" of 10 calls per second that continually increases tokens in the bucket.
+    private static BucketConfiguration getConfiguration3(){
+        long overdraft = 50;
+        Refill refill = Refill.greedy(10, Duration.ofMinutes(1));
+        Bandwidth bandwidth = Bandwidth.classic(overdraft, refill);
+        return Bucket4j.configurationBuilder().addLimit(bandwidth).build();
+    }
 
     // cache for storing token buckets, where IP is key.
     private javax.cache.Cache<String, GridBucketState> cache;
@@ -53,13 +83,6 @@ public class Launcher {
 
         // init bucket registry
         buckets = Bucket4j.extension(JCache.class).proxyManagerForCache(cache);
-    }
-
-    private Bucket createNewBucket() {
-        long overdraft = 50;
-        Refill refill = Refill.greedy(10, Duration.ofSeconds(1));
-        Bandwidth limit = Bandwidth.classic(overdraft, refill);
-        return Bucket4j.builder().addLimit(limit).build();
     }
 
     public static void main(String[] args) throws Exception {
@@ -299,10 +322,11 @@ public class Launcher {
                     int submitCount = 0;
                     while (submitCount < nbOfElements) {
                         // tryConsume returns false immediately if no tokens available with the bucket
-                        if (bucket.tryConsume(1)) {
-                            System.out.println("The rate limit is NOT exceeded");
+                        ConsumptionProbe probe = bucket.tryConsumeAndReturnRemaining(1);
+                        if (probe.isConsumed()) {
+                            System.out.println(String.format("The rate limit is NOT exceeded. %s", probe.toString()));
                         } else {
-                            System.out.println("The rate limit IS exceeded");
+                            System.out.println(String.format("The rate limit IS exceeded. Remaining tokens: %d. Time to wait for next refill: %d ms", probe.getRemainingTokens(), probe.getNanosToWaitForRefill()/1000/1000));
                         }
 
                         submitCount++;

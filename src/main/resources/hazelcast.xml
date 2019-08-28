@@ -1,0 +1,18 @@
+<hazelcast
+        xsi:schemaLocation="http://www.hazelcast.com/schema/config/hazelcast-config-3.7.xsd"
+        xmlns="http://www.hazelcast.com/schema/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <cache name="testCache">
+        <key-type class-name="java.lang.String" />
+        <value-type class-name="io.github.bucket4j.grid.GridBucketState" />
+        <statistics-enabled>false</statistics-enabled>
+        <management-enabled>false</management-enabled>
+    </cache>
+
+    <cache name="CompatibilityTest">
+        <key-type class-name="java.lang.String" />
+        <value-type class-name="java.lang.Integer" />
+        <statistics-enabled>false</statistics-enabled>
+        <management-enabled>false</management-enabled>
+    </cache>
+</hazelcast>
