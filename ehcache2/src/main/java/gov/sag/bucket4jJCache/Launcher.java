@@ -1,6 +1,7 @@
 package gov.sag.bucket4jJCache;
 
 import io.github.bucket4j.*;
+import io.github.bucket4j.grid.GridBucketState;
 import io.github.bucket4j.grid.ProxyManager;
 import io.github.bucket4j.grid.ehcache2.Ehcache2;
 import net.sf.ehcache.Cache;
@@ -352,9 +353,15 @@ public class Launcher {
 
     private void displayCacheElement(String keyToGet, boolean displayElements, boolean displayTiming) {
         Object valueObj = get(keyToGet, displayTiming);
+
+        BucketState bucketState = null;
+        if(null != valueObj && valueObj instanceof GridBucketState){
+            bucketState = ((GridBucketState)valueObj).getState();
+        }
+
         if (displayElements) {
-            if (null != valueObj) {
-                log.info("Key=[" + keyToGet.toString() + "] - value=[" + valueObj.toString() + "]");
+            if (null != bucketState) {
+                log.info("Key=[" + keyToGet.toString() + "] - value=[" + bucketState.toString() + "]");
             } else {
                 log.info("Key=["  + keyToGet.toString() + "]=null");
             }
@@ -363,12 +370,11 @@ public class Launcher {
 
     private Object get(String key, boolean displayTiming) {
         long start = System.nanoTime();
-
-        Element value = cache.get(key);
+        Element elem = cache.get(key);
         if (displayTiming)
             displayTiming("Operation cache.get(key)", start);
 
-        return (null != value)?value.getObjectValue():null;
+        return (null != elem)?elem.getObjectValue():null;
     }
 
     private void displayTiming(String prefix, long startTimeNanos) {
